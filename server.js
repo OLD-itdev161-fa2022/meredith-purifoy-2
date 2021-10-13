@@ -89,8 +89,7 @@ app.post(
             res.json({ token: token });
           }
         );
-
-        res.send('User successfully registered');
+        
       } catch (error) {
         res.status(500).send('Server error');
       }
