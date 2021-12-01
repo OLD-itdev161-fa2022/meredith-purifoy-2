@@ -1,56 +1,60 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import './styles.css';
+import './styles.css'
 
-const EditPost = ({ token, post, onPostUpdated }) => {
-  let history = useHistory();
-  const [postData, setPostData] = useState({
-    title: post.title,
-    body: post.body
-  });
-  const { title, body } = postData;
+const EditPost = ({ token, post, onPostUpdated}) => {
+    let history = useHistory();
+    const [postData, setPostData] = useState({
+        title: post.title,
+        body: post.body
+});
+const { title, body } = postData;
 
-  const onChange = e => {
+const onChange = e => {
     const { name, value } = e.target;
 
     setPostData({
-      ...postData,
-      [name]: value
+        ...postData,
+        [name]: value
     });
-  };
+};
 
-  const update = async () => {
+const update = async () => {
     if (!title || !body) {
-      console.log('Title and body are required');
+        console.log('Title and body are required');
     } else {
-      const newPost = {
-        title: title,
-        body: body
-      };
-
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            'x-auth-token': token
-          }
+        const newPost = {
+            title: title,
+            body: body
         };
 
-        // Create the post
-        const body = JSON.stringify(newPost);
-        const res = await axios.put(`/api/posts/${post._id}`, body, config);
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token':token
+                }
+            };
 
-        // Call the handler and redirect
-        onPostUpdated(res.data);
-        history.push('/');
-      } catch (error) {
-        console.error(`Error creating post: ${error.response.data}`);
-      }
+            // Create the post
+            const body = JSON.stringify(newPost);
+            const res = await axios.put(
+                `http://localhost:5000/api/posts/${post._id}`,
+                body,
+                config
+            );
+
+            // Call the handler and redirect
+            onPostUpdated(res.data);
+            history.push('/');
+        } catch (error) {
+            console.error(`Error creating post: ${error.response.data}`);
+        }
     }
-  };
+};
 
-  return (
+ return (
     <div className="form-container">
       <h2>Edit Post</h2>
       <input
